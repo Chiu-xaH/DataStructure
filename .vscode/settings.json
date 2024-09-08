@@ -1,0 +1,29 @@
+{
+    "files.associations": {
+        "*.embeddedhtml": "html",
+        "stdio.h": "c",
+        "stdlib.h": "c",
+        "array": "c",
+        "string": "c",
+        "string_view": "c",
+        "iostream": "cpp",
+        "stack.h": "c",
+        "algorithm": "c",
+        "cmath": "c",
+        "deque": "c",
+        "unordered_map": "c",
+        "vector": "c",
+        "initializer_list": "c",
+        "utility": "c",
+        "*.tcc": "c",
+        "cctype": "c",
+        "clocale": "c",
+        "cstdio": "c",
+        "cstdlib": "c",
+        "cwchar": "c",
+        "cwctype": "c",
+        "sstream": "c",
+        "linklist.h": "c",
+        "string.h": "c"
+    }
+}
