@@ -1,0 +1,89 @@
+（图）firstADJ,nextADJ
+（图）Kruskal怎么判断构成回路？：找这条边两个结点的根，相同则为环
+
+int FindRoot(int parent[],int vex) {
+	while(parent[vex] > 0) {
+		vex = parent[vex];
+	}
+	return vex;
+}
+
+void Kruskal(Mgraph G,Edge edge[]) {
+	初始化parent[G.numNodes]数组=0
+	for(i) {
+		int n = FindRoot(parent,edge[i].begin);
+		int m = FindRoot(parent,edge[i].end);
+		if(n != m) {
+			parent[n] = m;
+			printf("(%d %d)",begin+1,end+1);
+		}
+	}
+}
+
+//DFS非递归写法-借助栈
+void DFSNot(MGraph G) {
+    Stack S;
+    InitStack(&S);
+    for(int i = 0;i < G.numNodes;i++) {
+        visited[i] = FALSE;
+    }
+    for(int j = 0;j < G.numNodes;j++) {
+        if(visited[j] == FALSE) {
+            Push(&S,j);
+            visited[j] = TRUE;
+        }
+        
+        while(S.top != -1) {
+            ElemType E;
+            Pop(&S,&E);
+            printf("%d ",E+1);
+            for(int i = 0;i < G.numNodes;i++) {
+                if(G.arc[E][i] != INFINITY && G.arc[E][i] != 0) {
+                    if(visited[i] == FALSE) {
+                        visited[i] = TRUE;
+                        Push(&S,i);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+void InsertSort(List *L) {
+    for(int i = 1;i < L->length;i++) {
+        int temp = L->array[i];
+        int ptr = i-1;
+        //腾出空位
+        while(ptr >= 0 && L->array[ptr] > temp) {
+            L->array[ptr+1] = L->array[ptr];
+            ptr--;
+        }
+        //插入
+        L->array[ptr+1] = temp;
+    }
+}
+
+void HeapAdjust(List *L,int start,int end) {
+    int ptr = start,left = start*2+1,right = start*2+2;
+    if(left < end && L->array[left] > L->array[ptr]) {
+        ptr = left;
+    }
+    if(right < end && L->array[right] > L->array[ptr]) {
+        ptr = right;
+    }
+    if(ptr != start) {
+        Swap(L,start,ptr);
+        HeapAdjust(L,ptr,end);
+    }
+}
+
+void HeapSort(List *L) {
+    for(int i = L->length / 2 - 1;i >= 0;i--) {
+        HeapAdjust(L,i,L->length);
+    }
+    for(int i = L->length - 1;i > 0;i--) {
+        Swap(L,0,i);
+        HeapAdjust(L,0,i);
+    }
+}

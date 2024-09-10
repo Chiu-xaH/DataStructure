@@ -1,0 +1,3 @@
+队列
+长度=(rear-front+MAXSIZE)%MAXSIZE
+满队列：(rear+1)%MAXSIZE == front

@@ -1,0 +1,56 @@
+利用栈帧将递归转化为非递归
+
+栈的数据（S->data）为新定义的Frame，
+Frame包括：函数所需参数和阶段State 0为第一次 1为第二次...
+
+标准写法：
+
+typedef struct {
+    int W;
+    int state;  
+    // 状态：0 表示还未计算，
+    //1 表示已经处理过的计算
+} Frame;
+
+typedef struct {
+    int top;
+    Frame data[MAXSIZE];
+} Stack;
+
+
+void  P(int W) { 
+    if (W>0){
+        printf("%d",W);
+        P(W-1);
+        printf("%d",W);
+    } 
+}
+
+void PRecursion(int W) {
+    Stack S;
+    Init(&S);
+    Frame curretFrame = { W,0 };
+    Push(&S,curretFrame);
+    while(S.top != -1) {
+        Pop(&S,&curretFrame);
+        if (curretFrame.m > 0) {
+            if (curretFrame.state == 0) {
+                // 第一次打印
+                printf("%d", curretFrame.W);
+
+                // 准备递归
+                curretFrame.state = 1;
+                Push(&S, curretFrame);
+
+                // 递归到 W-1
+                Frame newFrame = {curretFrame.W - 1, 0};
+                Push(&S, newFrame);
+            } else if (curretFrame.state == 1) {
+                // 第二次打印
+                printf("%d", curretFrame.W);
+            }
+        }
+    }
+}
+
+
