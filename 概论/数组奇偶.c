@@ -13,6 +13,7 @@ void Swap(int A[], int i, int j) {
 }
 
 void q(int A[], int n) {
+    //处理分成三部分
     int left = 0, right = n - 1;
     while (left != right) {
         if (A[left] % 3 == 0)
@@ -46,7 +47,8 @@ int main()
     for (int i = 0; i < SIZE; i++) {
         printf("%d ", A[i]);
     }
-    /*
+
+    //处理分成两部分
     int left = 0,right = SIZE - 1;
     while(left < right) {
 
@@ -55,8 +57,13 @@ int main()
         }
         if(A[right] % 2 == 0) {
             right--;
+        } else {
+            int temp;
+            temp = A[left];
+            A[left] = A[right];
+            A[right] = temp;
         }
-        if(A[left] % 2 == 0 && left < right) {
+        /*if(A[left] % 2 == 0 && left < right) {
             int temp;
             temp = A[left];
             A[left] = A[right];
@@ -66,11 +73,11 @@ int main()
             temp = A[left];
             A[left] = A[right];
             A[right] = temp;
-        }
+        }*/
     }
 
-*/
-    q(A, SIZE);
+    //处理分成三部分
+    //q(A, SIZE);
     printf("\nOperated Array \n");
     for (int i = 0; i < SIZE; i++) {
         printf("%d ", A[i]);

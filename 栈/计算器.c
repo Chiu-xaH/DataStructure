@@ -50,7 +50,7 @@ Status Get(Stack *S) {
     return OK;
 }
 
-//µÃµ½Õ»¶¥ÔªËØµ«²»µ¯³ö
+//ï¿½Ãµï¿½Õ»ï¿½ï¿½Ôªï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 Elemtype Top(Stack S) {
     if(S.top == -1) {
         return NULLS;
@@ -122,7 +122,7 @@ void Transfer(char middle[],char end[]) {
     int ptr = 0,endPtr = 0;
 
     while(middle[ptr] != '\0') {
-        //ÊÇÊý×Ö
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if(!isSign(middle[ptr]) && middle[ptr] != ' ') {
             end[endPtr] = middle[ptr];
             endPtr++;
@@ -131,11 +131,11 @@ void Transfer(char middle[],char end[]) {
             end[endPtr] = ' ';
             endPtr++;
         }
-        //×óÀ¨ºÅ¡¢³Ë³ýºÅÖ±½ÓÈëÕ»
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Å¡ï¿½ï¿½Ë³ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½Õ»
         if(middle[ptr] == '(' || middle[ptr] == '*' || middle[ptr] == '/') {
             Push(&S,middle[ptr]);
         }
-        //ÓÒÀ¨ºÅ³öÕ»µ½×óÀ¨ºÅÎªÖ¹
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Å³ï¿½Õ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÎªÖ¹
         if(middle[ptr] == ')') {
             Elemtype E;
             while(Top(S) != '(') {
@@ -143,10 +143,10 @@ void Transfer(char middle[],char end[]) {
                 end[endPtr] = E;
                 endPtr++;
             }
-            //³öÕ»Ê£ÏÂµÄÓÒÀ¨ºÅ
+            //ï¿½ï¿½Õ»Ê£ï¿½Âµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             Pop(&S,&E);
         }
-        //¼Ó¼õºÅ£¬±È½ÏÕ»¶¥ÊÇ·ñÎª*/£¬ÊÇÔòÈ«²¿³öÕ»£¬ÔÙ½øÕ»¼Ó¼õºÅ
+        //ï¿½Ó¼ï¿½ï¿½Å£ï¿½ï¿½È½ï¿½Õ»ï¿½ï¿½ï¿½Ç·ï¿½Îª*/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½ï¿½Õ»ï¿½ï¿½ï¿½Ù½ï¿½Õ»ï¿½Ó¼ï¿½ï¿½ï¿½
         if(middle[ptr] == '+' || ptr[middle] == '-' ) {
             if(Top(S) == '*' || Top(S) == '/') {
                 Elemtype E;
@@ -184,7 +184,7 @@ void Jisuan(char end[]) {
                 num = num*10 + (end[ptr] - '0');
                 ptr++;
             }
-            //ÕâÀïÒÑ¾­µÃµ½Êý×Ö£¬ÔÙ¶¨ÒåÒ»¸öÐÂµÄINTÕ»£¬¾Í¿ÉÒÔËãÁË£¬ÂÔ
+            //ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½Ö£ï¿½ï¿½Ù¶ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Âµï¿½INTÕ»ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½
         }
     }
 }
@@ -192,7 +192,7 @@ void Jisuan(char end[]) {
 int main() {
     char middle[MAXSIZE];
     char end[MAXSIZE];
-    printf("»¶Ó­Ê¹ÓÃ¼ÆËãÆ÷ ÇëÊäÈëÖÐ×º±í´ïÊ½(ÊýÐè¿Õ¸ñ¸ô¿ª,¿ØÖÆÔÚ100×Ö·ûÒÔÄÚ)\n");
+    printf("ï¿½ï¿½Ó­Ê¹ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ºï¿½ï¿½ï¿½Ê½(ï¿½ï¿½ï¿½ï¿½Õ¸ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½100ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½)\n");
     gets(middle);
     Transfer(middle,end);
     int i = 0;
@@ -202,134 +202,3 @@ int main() {
     }
     Jisuan(end);
 }
-/*
-int mains() {
-    //¶¨ÒåÖÐ×º×ªºó×ºÕ»£¬ºó×º¼ÆËãÕ»
-    Stack transforStack,calculateStack;
-    Status transferI,calculateI;
-
-    char middle[MAXSIZE];
-    char end[MAXSIZE];
-    int left = INFINITY;
-    printf("»¶Ó­Ê¹ÓÃ¼ÆËãÆ÷ ÇëÊäÈëÖÐ×º±í´ïÊ½(²»Òª´ø¿Õ¸ñ,¿ØÖÆÔÚ100×Ö·ûÒÔÄÚ)\n");
-    gets(middle);
-
-    transferI = Init(&transforStack);
-    int i = 0,j = 0;
-    while(middle[i] != '\0') {
-        if(middle[i] > '0' && middle[i] < '9') {
-            //Êý×Ö
-            end[j] = middle[i];
-            j++;
-        } 
-        if(
-            middle[i] == '*' || 
-            middle[i] == '/' || 
-            middle[i] == '+' || 
-            middle[i] == '-' || 
-            middle[i] == '(' || 
-            middle[i] == ')'
-            ) {
-                char e = Top(&transforStack);
-                if(e != NULLS) {
-                    char tops = Top(&transforStack);
-                    if(middle[i] == ')') {
-                        if(left != INFINITY) {
-                            //()ÖÐ¼ä³öÕ»
-                            while(transforStack.top > left) {
-                               // printf("%d",transforStack.top);
-                                Elemtype e;
-                                transferI = Pop(&transforStack,&e);
-                                end[j] = e;
-                                j++;
-                            }
-                            transferI = Pop(&transforStack,&e);
-                            //É¾³ý³öÕ»µÄ£©×Ö·û
-                           // end[j-1] = '\0';
-                        } else {
-                            printf("ÊäÈëµÄ±í´ïÊ½²»¶Ô£¡");
-                            break;
-                        }
-                    } else 
-                    if(middle[i] == '(') {
-                        transferI = Push(&transforStack,middle[i]);
-                        left = transforStack.top;
-                    } else 
-                    if(middle[i] == '+' || middle[i] == '-') {
-                        if(tops == '*' || tops == '/') {
-                            //³öÕ»ºó
-                            while (transforStack.top != -1) {
-                                Elemtype e;
-                                transferI = Pop(&transforStack,&e);
-                                end[j] = e;
-                                j++;
-                            }
-                            //ÔÙ½øÕ»
-                            transferI = Push(&transforStack,middle[i]);
-                        } else {
-                            transferI = Push(&transforStack,middle[i]);
-                        }
-                    } else 
-                    if(middle[i] == '*' || middle[i] == '/') {
-                        transferI = Push(&transforStack,middle[i]);
-                    }
-                } else {
-                    transferI = Push(&transforStack,middle[i]);
-                }
-        }
-        i++;
-    }
-    end[j] = transforStack.data[transforStack.top] ;
-    end[j+1] = '\0';
-
-    printf("%s\n",end);
-
-
-
-
-    calculateI = Init(&calculateStack);
-    int result = 0;
-    int k = 0,l = 0;
-    while(end[k] != '\0') {
-        if(isdigit(end[k]) != 0) {
-            //Êý×Ö
-            calculateI = Push(&calculateStack,end[k]);
-        } 
-        if(
-            end[k]  == '*' || 
-            end[k]  == '/' || 
-            end[k]  == '+' || 
-            end[k]  == '-'
-            ) {
-                Elemtype num2,num1;
-                int new = 0;
-                calculateI = Pop(&calculateStack,&num2);
-                calculateI = Pop(&calculateStack,&num1);
-                int num22  = transfer(num2);
-                int num11 = transfer(num1);
-                if(end[k]  == '*') {
-                    new  = num11 * num22 ;
-                } else if(end[k] == '/') {
-                    new = num11 / num22;
-                } else if(end[k] == '+') {
-                    new = num11 + num22;
-                } else if(end[k] == '-') {
-                    new = num11 - num22;
-                }
-                result = new;
-                Elemtype num3 = transfer2(new);
-                calculateI = Push(&calculateStack,num3);
-            }
-        calculateI = Get(&calculateStack);  
-        k++;
-    }
-    if (calculateStack.top == 1) {
-        result += transfer(calculateStack.data[0]);
-    }
-
-    
-    printf("½á¹ûÎª %d",result);
-    return 0;
-}
-
-*/
