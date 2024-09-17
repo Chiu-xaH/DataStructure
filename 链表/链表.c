@@ -399,6 +399,9 @@ void Resolve(LinkList L,LinkList *JiL,LinkList *OuL) {
     }
 }
 
+//补充题：递增有序链表，设计算法去重，要求尽可能的高效率
+//思路：用两个指针从头扫描，遇到相同的第一个指针固定，第二个继续直到不相同，然后删除中间重复的若干节点即可，补充这道题时我已经考完了，具体实现欢迎补充
+void DeWeight() {}
 
 int main() {
     Status i;
