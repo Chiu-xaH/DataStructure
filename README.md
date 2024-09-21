@@ -4,7 +4,7 @@
 
 适用于期末考试或转专业，每个函数都可能在试卷上出现！
 
-## [面试、笔试内容](https://github.com/Chiu-xaH/DataStructure/blob/main/EXAM.md)
+## [转专业相关](https://github.com/Chiu-xaH/DataStructure/blob/main/EXAM.md)
 
 ## 参考资料：
 
