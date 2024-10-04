@@ -369,6 +369,7 @@ void SelectSort(List *L) {
 }
 //列表递增 设计算法去重，要求时间尽可能少
 //(1,1,2,2,2,3,4,5,5,5,6,6,7,7,8,8,8,9)模拟执行，统计次数，分析时间性能
+//补充说明：下面的算法尽管可以实现需求，但是可以优化，设置两个指针，same变量，记录相同数字的个数，在删除移位的时候按same个移动，而不是一个一个挪，具体实现交给大家补充(DeWightRe)了
 void DeWeightUpdate(List *L) {
     int left = 0,right = left+1,count = 0;
     while(left != L->count) {
@@ -391,6 +392,8 @@ void DeWeight(List *L) {
     SelectSort(L);
     DeWeightUpdate(L);
 }
+
+void DeWeightRe() {}
 
 int main() {
     Status i;
