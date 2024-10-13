@@ -5,7 +5,7 @@
 适用于期末考试或转专业，每个函数都可能在试卷上出现
 
 ## [转专业相关](https://github.com/Chiu-xaH/DataStructure-And-CS-Resource/blob/main/EXAM.md)
-## [计科课程资料补充](https://github.com/Chiu-xaH/DataStructure-And-CS-Resource/blob/main/OTHER 计科学校课程资料补充/README.md)
+## [计科课程资料补充](https://github.com/Chiu-xaH/DataStructure-And-CS-Resource/blob/main/OTHER计科学校课程资料补充/README.md)
 ## 主要参考资料：
 
 《大话数据结构》
