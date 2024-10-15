@@ -1,11 +1,10 @@
-# 数据结构和课程资料
+# 数据结构
 ## 说明
 自学数据结构的所有实践代码和学习资料，以及后期计科的一些补充学校课程资料
 
 适用于期末考试或转专业，每个函数都可能在试卷上出现
 
 ## [转专业相关](https://github.com/Chiu-xaH/DataStructure-And-CS-Resource/blob/main/EXAM.md)
-## [计科课程资料补充](https://github.com/Chiu-xaH/DataStructure-And-CS-Resource/blob/main/OTHER学校课程资料补充/README.md)
 ## 主要参考资料：
 
 《大话数据结构》
