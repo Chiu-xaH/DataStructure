@@ -186,3 +186,126 @@ bool isSubtree(struct TreeNode* root, struct TreeNode* subRoot) {
     if (isSameTree(root, subRoot)) return true;
     return isSubtree(root->left, subRoot) || isSubtree(root->right, subRoot);
 }
+//叶子相似的树
+
+//请考虑一棵二叉树上所有的叶子，这些叶子的值按从左到右的顺序排列形成一个 叶值序列 。
+//举个例子，如上图所示，给定一棵叶值序列为 (6, 7, 4, 9, 8) 的树。
+//如果有两棵二叉树的叶值序列是相同，那么我们就认为它们是 叶相似 的。
+//如果给定的两个根结点分别为 root1 和 root2 的树是叶相似的，则返回 true；否则返回 false 。
+void PreOrder(struct TreeNode* tree,int* leafList,int *size) {
+    if(tree) {
+        if(tree->left == NULL && tree->right == NULL) {
+            leafList[*size] = tree->val;
+            (*size)++;
+        }
+        PreOrder(tree->left,leafList,size);
+        PreOrder(tree->right,leafList,size);
+    }
+}
+
+bool leafSimilar(struct TreeNode* root1, struct TreeNode* root2) {
+    int leafList1[199];
+    int leafList2[199];
+    int size1 = 0,size2 = 0;
+    PreOrder(root1,leafList1,&size1);
+    PreOrder(root2,leafList2,&size2);
+    if(size1 == size2) {
+        for(int i = 0;i < size1;i++) {
+            if(leafList1[i] != leafList2[i]) {
+                return false;
+            }
+        }
+        return true;
+    } else {
+        return false;
+    }
+}
+
+ 
+//单值二叉树：判断所有结点是否都为一个值
+bool PreOrder(struct TreeNode* tree,int value) {
+    if(tree != NULL) {
+        if(tree->val != value) return false;
+        return PreOrder(tree->left,value) && PreOrder(tree->right,value);
+    }
+    return true;
+}
+
+bool isUnivalTree(struct TreeNode* root) {
+    int value = root->val;
+    return PreOrder(root,value);
+}
+//二叉树额坡度
+/*
+一个树的 节点的坡度 定义即为，该节点左子树的节点之和和右子树节点之和的 差的绝对值 。如果没有左子树的话，左子树的节点之和为 0 ；没有右子树的话也是一样。空结点的坡度是 0 。
+
+整个树 的坡度就是其所有节点的坡度之和。
+示例 ：
+    4
+   / \
+  2  9
+ /\   \
+3 5    7
+输出：15
+解释：
+节点 3 的坡度：|0-0| = 0（没有子节点）
+节点 5 的坡度：|0-0| = 0（没有子节点）
+节点 7 的坡度：|0-0| = 0（没有子节点）
+节点 2 的坡度：|3-5| = 2（左子树就是左子节点，所以和是 3 ；右子树就是右子节点，所以和是 5 ）
+节点 9 的坡度：|0-7| = 7（没有左子树，所以和是 0 ；右子树正好是右子节点，所以和是 7 ）
+节点 4 的坡度：|(3+5+2)-(9+7)| = |10-16| = 6（左子树值为 3、5 和 2 ，和是 10 ；右子树值为 9 和 7 ，和是 16 ）
+坡度总和：0 + 0 + 0 + 2 + 7 + 6 = 15
+*/
+
+//找出BST中的众数
+//统计树的结点数
+void count(struct TreeNode* root,int *num) {
+    if(root) {
+        (*num)++;
+        count(root->left,num);
+        count(root->right,num);
+    }
+}
+
+void inorder(struct TreeNode* root, int* prev, int* count, int* maxCount, int* result, int* returnSize) {
+    if (root == NULL) return;
+    
+    inorder(root->left, prev, count, maxCount, result, returnSize);
+    
+    if (*prev == root->val) {
+        (*count)++;  // 当前值与前一个值相同，计数加1
+    } else {
+        *count = 1;  // 否则重置计数
+    }
+    
+    if (*count > *maxCount) {
+        *maxCount = *count;
+        *returnSize = 1;  // 更新最大计数，并将结果数组重置
+        result[0] = root->val;
+    } else if (*count == *maxCount) {
+        result[*returnSize] = root->val;  // 如果当前计数等于最大计数，保存当前值
+        (*returnSize)++;
+    }
+    
+    *prev = root->val;  // 更新前一个值为当前值
+    
+    inorder(root->right, prev, count, maxCount, result, returnSize);
+}
+
+int* findMode(struct TreeNode* root, int* returnSize) {
+    *returnSize = 0;
+    if (root == NULL) return NULL;
+    
+    int counts = 0;
+    count(root, &counts); 
+    
+    int* result = (int*)malloc(sizeof(int) * counts);  // 动态分配空间，存储结果
+    
+    int prev = 0;
+    int count = 0;
+    int maxCount = 0;
+    
+    inorder(root, &prev, &count, &maxCount, result, returnSize);  // 中序遍历
+    
+    return result;
+}
