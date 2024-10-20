@@ -1,0 +1,17 @@
+import random
+import string
+
+N = 2  # 嵌套列表数量
+M = 3  # 每个字符串的长度
+num = []
+
+for _ in range(N):
+    # 字母+数字
+    a = ''.join(random.sample(string.digits + string.ascii_letters, M))
+    print(a)
+    num.append([a])  # 加入列表
+
+# 按字符串的长度降序
+num_sorted = sorted(num,key = lambda x : len(x[0]),reverse = True)
+
+print(num_sorted)
