@@ -52,4 +52,7 @@ Mkfile.old
 dkms.conf
 .idea/
 .vscode/
-测试/
+
+tempCodeRunnerFile.c
+tempCodeRunnerFile.exe
+tempCodeRunnerFile.python
