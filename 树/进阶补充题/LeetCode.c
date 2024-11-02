@@ -334,3 +334,66 @@ int findSecondMinimumValue(struct TreeNode* root) {
         return -1;
     }
 }
+
+//树的右视图
+ //思路：如果结点有右孩子 展示右孩子
+ //如果结点无右孩子有左孩子 展示左孩子
+ //如果结点无右孩子无左孩子（叶子） 谁也不展示
+void order(struct TreeNode* root,int *arr,int *size,int height) {
+    if(root == NULL) return;
+    if(height == *size) {
+        arr[(*size)++] = root->val;
+    }
+    order(root->right,arr,size,height+1);
+    order(root->left,arr,size,height+1);
+}
+int* rightSideView(struct TreeNode* root, int* returnSize) {
+    *returnSize = 0;
+    int* arr = (int*)malloc(sizeof(int)*100);
+    order(root,arr,returnSize,0);
+    return arr;
+}
+
+
+//找树最左下角值
+ int max(int a,int b) {
+    return a > b ? a : b;
+ }
+ int height(struct TreeNode* root) {
+    if(root == NULL) return 0;
+    return max(height(root->left),height(root->right))+1;
+ }
+ void order(struct TreeNode* root,int *num,int hei,int cur) {
+    if(root ==NULL) return;
+    if(hei == cur) *num = root->val;
+    
+    order(root->right,num,hei,cur+1);
+    order(root->left,num,hei,cur+1);
+ }
+int findBottomLeftValue(struct TreeNode* root) {
+    int num;
+    order(root,&num,height(root),1);
+    return num;
+}
+
+//合并二叉树（值也要合并）
+struct TreeNode* mergeTrees(struct TreeNode* root1, struct TreeNode* root2) {
+    if(root1 == NULL) return root2;
+    if(root2 == NULL) return root1;
+    root1->val += root2->val;
+    root1->left = mergeTrees(root1->left,root2->left);
+    root1->right = mergeTrees(root1->right,root2->right);
+    return root1;
+}
+//二叉树剪枝 原二叉树结点要么1要么0，返回移除所有不包含1的子树的二叉树
+struct TreeNode* pruneTree(struct TreeNode* root) {
+    if(root == NULL) return root;
+    
+    root->left = pruneTree(root->left);
+    root->right = pruneTree(root->right);
+    //按后序遍历看，就是依次移除叶子0结点，如果用前序遍历或者中序遍历麻烦的多
+    if (root->val == 0 && root->left == NULL && root->right == NULL) {
+        return NULL;
+    }
+    return root;
+}

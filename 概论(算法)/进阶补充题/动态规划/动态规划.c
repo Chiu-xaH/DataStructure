@@ -88,6 +88,102 @@ int minPathSum(int** grid, int gridSize, int* gridColSize) {
     return dp[gridSize-1][(*gridColSize)-1];
 }
 
+//爬楼梯
+/*
+给你一个整数数组 cost ，其中 cost[i] 是从楼梯第 i 个台阶向上爬需要支付的费用。一旦你支付此费用，即可选择向上爬一个或者两个台阶。
+你可以选择从下标为 0 或下标为 1 的台阶开始爬楼梯。
+请你计算并返回达到楼梯顶部的最低花费。
+*/
+int min(int a,int b) {
+    return a < b ? a : b;
+}
+
+int minCostClimbingStairs(int* cost, int costSize) {
+    int f1 = 0,f0 = 0;
+    for(int i = 0;i < costSize;i++) {
+        int c = min(f0,f1) + cost[i];
+        f0 = f1;
+        f1 = c;
+    }
+    return min(f1,f0);
+}
+/*
+给你一个整数数组 nums ，你可以对它进行一些操作。
+每次操作中，选择任意一个 nums[i] ，删除它并获得 nums[i] 的点数。之后，你必须删除 所有 等于 nums[i] - 1 和 nums[i] + 1 的元素。
+开始你拥有 0 个点数。返回你能通过这些操作获得的最大点数。
+*/
+
+int* transfer(int *nums, int numsSize, int* maxVal) {
+    *maxVal = 0;
+    for (int i = 0; i < numsSize; i++) {
+        if (nums[i] > *maxVal) *maxVal = nums[i];
+    }
+    
+    int* arr = (int*)malloc(sizeof(int) * (*maxVal + 1));
+    for (int i = 0; i <= *maxVal; i++) {
+        arr[i] = 0;
+    }
+
+    for (int i = 0; i < numsSize; i++) {
+        arr[nums[i]] += nums[i];
+    }
+
+    return arr;
+}
+
+int max(int a, int b) {
+    return a > b ? a : b;
+}
+
+int deleteAndEarn(int* nums, int numsSize) {
+    if (numsSize == 0) return 0;
+
+    int maxVal = 0;
+    int* arr = transfer(nums, numsSize, &maxVal);
+    int* dp = (int*)malloc(sizeof(int) * (maxVal + 1));
+
+    dp[0] = 0;
+    dp[1] = arr[1];
+
+    for (int i = 2; i <= maxVal; i++) {
+        dp[i] = max(dp[i - 1], dp[i - 2] + arr[i]);
+    }
+
+    
+    return dp[maxVal];
+}
+
+/*
+给定一个 m x n 的整数数组 grid。一个机器人初始位于 左上角（即 grid[0][0]）。机器人尝试移动到 右下角（即 grid[m - 1][n - 1]）。机器人每次只能向下或者向右移动一步。
+网格中的障碍物和空位置分别用 1 和 0 来表示。机器人的移动路径中不能包含 任何 有障碍物的方格。
+返回机器人能够到达右下角的不同路径数量。
+*/
+
+int uniquePathsWithObstacles(int** grid, int gridSize, int* gridColSize) {
+    if(grid[0][0] == 1) return 0;
+
+    int dp[gridSize][*gridColSize];
+    dp[0][0] = 1;
+    for(int i = 1;i < gridSize;i++) {
+        //本题核心：无障碍dp为1 grid为0 注意区分
+        dp[i][0] = grid[i][0] == 0 && dp[i-1][0] == 1;
+    }
+    for(int j = 1;j < *gridColSize;j++) {
+        dp[0][j] = grid[0][j] == 0 && dp[0][j-1] == 1;
+    }
+    for(int i = 1;i < gridSize;i++) {
+        for(int j = 1;j < *gridColSize;j++) {
+            if(grid[i][j] == 1) {
+                dp[i][j] = 0;
+            } else {
+                dp[i][j] = dp[i-1][j] + dp[i][j-1];
+            }
+        }
+    }
+    return dp[gridSize-1][(*gridColSize)-1];
+}
+
+
 /*
 一,顺序表
 线性枚举 前缀和 双指针 二分枚举 三分枚举 离散化 冒泡排序 选择排序快速排序 插入排序 希尔排序 归并排序 堆排序 基数排序 计数排序 模拟 贪心
