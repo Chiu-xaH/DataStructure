@@ -397,3 +397,66 @@ struct TreeNode* pruneTree(struct TreeNode* root) {
     }
     return root;
 }
+
+/*
+给你一棵二叉树的根节点 root ，二叉树中节点的值 互不相同 。另给你一个整数 start 。在第 0 分钟，感染 将会从值为 start 的节点开始爆发。
+每分钟，如果节点满足以下全部条件，就会被感染：
+->节点此前还没有感染。
+->节点与一个已感染节点相邻。
+返回感染整棵树需要的分钟数。
+*/
+//解题思路：树转化为无向图 BFS搜索即可
+//需要用到三个数据结构：树（二叉链表树） 图（邻接表） 队列
+//由于我自己写的代码过于冗余，就贴上其他优秀力扣用户的了
+//C++
+class Solution {
+public:
+    using IntTreeNode = TreeNode;
+    int DfsTree(IntTreeNode* root, int start, int use_time, bool& visit, int& res, int& start_deep, int cur_deep)
+    {
+        if (!root)return 0;
+
+        if (root->val == start)
+        {
+            visit = true;
+            start_deep = cur_deep;
+        }
+
+        auto last_visit = visit;
+        //当前节点是start的子节点或者同属于一个子树
+        if (last_visit && !(root->val == start))
+        {
+            ++use_time;
+            res = max(use_time, res);
+        }
+
+        auto left_deep = DfsTree(root->left, start, use_time, visit, res, start_deep, cur_deep+1);
+        auto left_vist = visit;
+        //start在左子树
+        if (!last_visit && left_vist)
+        {
+            use_time += start_deep-cur_deep;
+            res = max(use_time, res);
+        }
+
+        auto right_deep = DfsTree(root->right, start, use_time, visit, res, start_deep, cur_deep + 1);
+        auto right_visit = visit;
+        //start在右子树
+        if (!left_vist && right_visit)
+        {
+            use_time += left_deep + start_deep - cur_deep;
+            res = max(use_time, res);
+        }
+        
+        //返回当前子树的深度
+        return max(right_deep, left_deep) + 1;
+    }
+
+    int amountOfTime(IntTreeNode* root, int start)
+    {
+        int res{ 0 }, use_time{ 0 }, start_deep{ 0 };
+        bool visit{ false };
+        DfsTree(root, start, use_time, visit, res, start_deep,0);
+        return res;
+    }
+};
