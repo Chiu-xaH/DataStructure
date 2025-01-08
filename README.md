@@ -1,7 +1,15 @@
-# 数据结构
+# 数据结构与算法
 ## 说明
 自学数据结构的所有实践代码和学习资料，适用于期末考试或转专业，每个函数都可能在试卷上出现
-## [转专业相关](https://github.com/Chiu-xaH/DataStructure-And-CS-Resource/blob/main/EXAM.md)
+
+文件夹中的进阶补充题感兴趣可看，是我考后刷算法题补充的，学校考试不考
+
+## [应对转专业](https://github.com/Chiu-xaH/DataStructure-And-CS-Resource/blob/main/EXAM.md)
+
+## 应对期末考试
+如果认真学数据结构，就自己动手用代码实现一遍PPT中的问题，用代码实现讲到的数据结构
+
+如果就应对期末考试，不想写就不写代码，多刷刷题，看答案，题型考的都比较固定
 ## 主要参考资料：
 
 《大话数据结构》
