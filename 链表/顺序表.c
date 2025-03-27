@@ -385,8 +385,36 @@ void DeWeightUpdate(List *L) {
         }
     }
     L->count++;
-    //printf("Runned %d times\n",count);
+    // printf("Runned %d times\n",count);
 }
+// 优化版 
+void DeWeightUpdate2(List *L) {
+    int left = 0,right = 1,same = 0,count = 0;
+    while (right != L->count) {
+        if (L->data[left] == L->data[right]) {
+            same++;
+        } else {
+            if (same > 0) {
+                // 批量右移，减少移动次数
+                for (int i = right; i < L->count; i++) {
+                    L->data[i - same] = L->data[i];
+                }
+                count++;
+                L->count -= same; // 更新元素个数
+                right -= same; // 调整 right
+                same = 0;
+            }
+            left = right;
+        }
+        right++;
+    }
+    // 处理末尾情况
+    if (same > 0) {
+        L->count -= same;
+    }
+    printf("Runned %d times\n",count);
+}
+
 
 void DeWeight(List *L) {
     SelectSort(L);
@@ -457,10 +485,11 @@ int main() {
       //  printf("NO");
    // }
     //DifferentSet(&L1,L2);
-    DeWeightUpdate(&L1);
-    Delete(&L1,5);
     Get(L1);
-    InsertUpdate(&L1,5);
+    DeWeightUpdate2(&L1);
+    // Delete(&L1,5);
+    // Get(L1);
+    // InsertUpdate(&L1,5);
     Get(L1);
     return 0;
 }
