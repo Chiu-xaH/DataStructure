@@ -399,9 +399,18 @@ void Resolve(LinkList L,LinkList *JiL,LinkList *OuL) {
     }
 }
 
-//补充题：递增有序链表，设计算法去重，要求尽可能的高效率
+//补充题：删除递增有序单链表中的重复元素，要求时间性能最好
 //思路：用两个指针从头扫描，遇到相同的第一个指针固定，第二个继续直到不相同，然后删除中间重复的若干节点即可，补充这道题时我已经考完了，具体实现欢迎补充
-void DeWeight() {}
+void DeWeight(LinkList *L) {
+    
+}
+
+// 查找链表中倒数第k个位置上的结点（k为正整数）。若查找成功，算法输出该结点的data值，并返回1；否则，只返回0。
+Status FindK(LinkList L,int k) {
+    
+}
+// 递增有序单链表，原地合并，并删掉废弃的头结点
+
 
 int main() {
     Status i;

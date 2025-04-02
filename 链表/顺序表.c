@@ -243,9 +243,8 @@ List Multi(int num1,int num2) {
 List Divide(int num1,int num2) {
     //没什么思路
 }
-//列表递增 设计算法实现集合并、交、差、子集
-//list1={1,2,3,4,5}
-//list2={2,4,6}
+//列表递增 设计算法实现集合 并、交、差、子集
+// C = A 交 B
 List JointSet(List list1,List list2) {
     int ptr1 = 0,ptr2 = 0;
     List new;
@@ -266,9 +265,119 @@ List JointSet(List list1,List list2) {
     }
     return new;
 }
-//list1={1,2,3,4,5}
-//list2={2,4,6}
-void LinkSet(List *list1,List list2) {
+// C = A 并 B
+List LinkSet(List list1, List list2) {
+    int ptr1 = 0, ptr2 = 0;
+    List new;
+    Init(&new);
+    while (ptr1 != list1.count && ptr2 != list2.count) {
+        int data1 = list1.data[ptr1];
+        int data2 = list2.data[ptr2];
+        if (data1 < data2) {
+            new.data[new.count++] = data1;
+            ptr1++;
+        } else if (data1 > data2) {
+            new.data[new.count++] = data2;
+            ptr2++;
+        } else {
+            new.data[new.count++] = data1;
+            ptr1++;
+            ptr2++;
+        }
+    }
+    while (ptr1 != list1.count) {
+        new.data[new.count] = list1.data[ptr1];
+        ptr1++;
+        new.count++;
+    }
+    while (ptr2 != list2.count) {
+        new.data[new.count] = list2.data[ptr2];
+        ptr2++;
+        new.count++;
+    }
+    return new;
+}
+// C = A 差 B
+List DifferenceSet(List list1, List list2) {
+    int ptr1 = 0, ptr2 = 0;
+    List new;
+    Init(&new);
+    while (ptr1 != list1.count && ptr2 != list2.count) {
+        int data1 = list1.data[ptr1];
+        int data2 = list2.data[ptr2];
+        if (data1 < data2) {
+            new.data[new.count] = data1;
+            new.count++;
+            ptr1++;
+        } else if (data1 > data2) {
+            ptr2++;
+        } else {
+            ptr1++;
+            ptr2++;
+        }
+    }
+    while (ptr1 != list1.count) {
+        new.data[new.count] = list1.data[ptr1];
+        new.count++;
+        ptr1++;
+    }
+    return new;
+}
+// A = A 并 B
+void DifferentSet2(List *list1, List list2) {
+    int ptr1 = 0, ptr2 = 0, count = 0;
+    int array[list1->count];
+    while (ptr1 != list1->count && ptr2 != list2.count) {
+        int data1 = list1->data[ptr1];
+        int data2 = list2.data[ptr2];
+        if (data1 < data2) {
+            array[count] = data1;
+            count++;
+            ptr1++;
+        } else if (data1 > data2) {
+            ptr2++;
+        } else {
+            ptr1++;
+            ptr2++;
+        }
+    }
+    while (ptr1 != list1->count) {
+        array[count] = list1->data[ptr1];
+        count++;
+        ptr1++;
+    }
+    // 重新写入 list1
+    list1->count = count;
+    for (int i = 0; i < count; i++) {
+        list1->data[i] = array[i];
+    }
+}
+// A = A 交 B
+void JointSet2(List *list1, List list2) {
+    int ptr1 = 0, ptr2 = 0, count = 0;
+    int array[list1->count];
+    while (ptr1 != list1->count && ptr2 != list2.count) {
+        int data1 = list1->data[ptr1];
+        int data2 = list2.data[ptr2];
+        if (data1 < data2) {
+            ptr1++;
+        } else if (data1 > data2) {
+            ptr2++;
+        } else {
+            array[count] = data1;
+            count++;
+            ptr1++;
+            ptr2++;
+        }
+    }
+    // 重新写入list1
+    list1->count = count;
+    for (int i = 0; i < count; i++) {
+        list1->data[i] = array[i];
+    }
+}
+// A = A 并 B
+void LinkSet2(List *list1,List list2) {
     int ptr1 = 0,ptr2 = 0;
     while (ptr1 != list1->count && ptr2 != list2.count) {
         int data1 = list1->data[ptr1];
@@ -288,8 +397,24 @@ void LinkSet(List *list1,List list2) {
         ptr2++;
     }
 }
-//list1={1,2,3,4,5}
-//list2={2,4,6}
+// A = A 差 B
+void DifferentSet2(List *list1,List list2) {
+    int ptr1 = 0,ptr2 = 0,count = 0;
+    int array[list1->count];
+    while (ptr1 != list1->count && ptr2 != list2.count) {
+        int data1 = list1->data[ptr1];
+        int data2 = list2.data[ptr2];
+        if(data1 > data2) {
+            ptr2++;
+        } else if(data1 < data2) {
+            ptr1++;
+        } else {
+            Delete(list1,ptr1+1);
+            ptr2++;
+        }
+    }   
+}
+// 判断是否为子集
 Status SubSet(List list1,List list2) {
     int ptr1 = 0,ptr2 = 0, count = 0;
     while (ptr1 != list1.count && ptr2 != list2.count) {
@@ -313,24 +438,6 @@ Status SubSet(List list1,List list2) {
         }
     }
     return OK;
-}
-//list1={1,2,3,4,5}
-//list2={2,4}
-void DifferentSet(List *list1,List list2) {
-    int ptr1 = 0,ptr2 = 0,count = 0;
-    int array[list1->count];
-    while (ptr1 != list1->count && ptr2 != list2.count) {
-        int data1 = list1->data[ptr1];
-        int data2 = list2.data[ptr2];
-        if(data1 > data2) {
-            ptr2++;
-        } else if(data1 < data2) {
-            ptr1++;
-        } else {
-            Delete(list1,ptr1+1);
-            ptr2++;
-        }
-    }   
 }
 //列表递增 设计算法插入元素，仍保持有序，且插入后无重复元素，有则不插入,要求时间尽可能少
 //{1,2,3,4,6,7,8,9}
@@ -422,6 +529,32 @@ void DeWeight(List *L) {
 }
 
 void DeWeightRe() {}
+
+//设计算法分解链表为奇数表、偶数表
+void Resolve(List L,List *JiL,List *OuL) {
+    Init(JiL);
+    Init(OuL);
+    int ptr = 0;
+    while(ptr != L.count) {
+        int item = L.data[ptr];
+        if(item % 2 == 0) {
+            Add(OuL,item);
+        } else {
+            Add(JiL,item);
+        }
+        ptr++;
+    }
+}
+// 求有序顺序表中位数
+float Middle(List L) {
+    // 判断数量奇偶
+    if(L.count % 2 == 0) {
+        // 偶数 第n/2个数与第 (n/2)+1个数的平均值
+        return (L.data[L.count/2 - 1] + L.data[L.count/2]) / 2.0;
+    } else {
+        return L.data[L.count/2]; 
+    }
+}
 
 int main() {
     Status i;
