@@ -96,8 +96,8 @@ Status Question1(LinkList *L,Elemtype E) {
     return Insert(L,E,place);
 }
 
-int Length(LinkList *L) {
-    LinkList list = (*L)->next;
+int Length(LinkList L) {
+    LinkList list = L->next;
     int count = 0;
     while(list) {
         list = list->next;
@@ -399,17 +399,103 @@ void Resolve(LinkList L,LinkList *JiL,LinkList *OuL) {
     }
 }
 
+// 两个方法，时间是一致的，因为要释放free()每个结点，不得不逐个遍历，像顺序表可以批量移动，用双指针法就会得到明显提升。
+void DeWeight(LinkList *L) {
+    if (*L == NULL || (*L)->next == NULL)
+        return;
+
+    LinkList list = (*L)->next;
+    while (list && list->next) {
+        if (list->data == list->next->data) {
+            // 删除
+            LinkList old = list->next;
+            list->next = old->next;
+            free(old);
+        } else {
+            list = list->next; 
+        }
+    }
+}
+
 //补充题：删除递增有序单链表中的重复元素，要求时间性能最好
 //思路：用两个指针从头扫描，遇到相同的第一个指针固定，第二个继续直到不相同，然后删除中间重复的若干节点即可，补充这道题时我已经考完了，具体实现欢迎补充
-void DeWeight(LinkList *L) {
-    
+void DeWeightUpdate(LinkList *L) {
+    if (*L == NULL || (*L)->next == NULL)
+        return;
+
+    LinkList left = (*L)->next;
+    while (left) {
+        LinkList right = left->next;
+        // 右指针没到尾 且 右指针和左指针重复值 则开始固定左指针，移动右指针直到不重复
+        while (right && right->data == left->data) {
+            LinkList temp = right;
+            right = right->next;
+            free(temp);
+        }
+        // 指向第一次非重复元素
+        left->next = right; 
+        // 继续
+        left = right; 
+    }
 }
 
 // 查找链表中倒数第k个位置上的结点（k为正整数）。若查找成功，算法输出该结点的data值，并返回1；否则，只返回0。
-Status FindK(LinkList L,int k) {
-    
+Status FindK(LinkList L, int k) {
+    if(k <= 0) {
+        return ERROR;
+    }
+    LinkList right = L->next, left = L->next;
+    int count = 0;
+    // 右指针先走k步
+    while (right && count < k) {
+        right = right->next;
+        count++;
+    }
+    // 验证k合法 如果提前走到头了，说明k不合法
+    if (count < k) {
+        return ERROR;
+    }
+    // 双指针同时移动，直到右指针走到末尾
+    while (right) {
+        right = right->next;
+        left = left->next;
+    }
+    // 左结点的值
+    printf("%d\n", left->data);
+    return OK;
 }
+
 // 递增有序单链表，原地合并，并删掉废弃的头结点
+void Merge(LinkList *L1, LinkList *L2) {
+    if (*L1 == NULL || *L2 == NULL) 
+        return;
+
+    LinkList list1 = *L1, list2 = (*L2)->next;
+    LinkList list1Next = NULL, list2Next = NULL;
+    while(list1->next && list2) {
+        if(list1->next->data >= list2->data) {
+            // 进行合并 2指针的结点插入到1指针的前面
+            // 记录原指针的下一个结点
+            list2Next = list2->next;
+            list1Next = list1->next;
+            // 修改2指针的next
+            list2->next = list1Next;
+            // 修改1指针的next
+            list1->next = list2;
+            // 完成修改 移动双指针
+            list2 = list2Next;
+        } 
+        // 继续走1指针 不用合并
+        list1 = list1->next;
+    }    
+    // 连接剩余部分
+    if(list2) {
+        list1->next = list2;
+    }
+    // 删除2的头结点
+    free(*L2);
+    *L2 = NULL;
+}
 
 
 int main() {
@@ -438,7 +524,7 @@ int main() {
   //  i = Delete(&L,4);
   //  i = Reverse(&L);
   //  i = Copy(&L,&newL);
- // printf("%d",Length(&L));
+ // printf("%d",Length(L));
    // i = Get(L);
    // i = Get(L);
     //i = Question1(&L2,3);
