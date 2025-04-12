@@ -427,6 +427,23 @@ void Load(Tree T,int i) {
     Elemtype paths[MAXSIZE];
     GetLoadUpdate(node,T,paths);
 }
+
+
+Status MiddleWithNum(Tree T, int *num) {
+    if (T != NULL) {
+        MiddleWithNum(T->leftChild, num);
+        printf("(%c,%d) ", T->data, (*num)++);
+        MiddleWithNum(T->rightChild, num);
+        return OK;
+    } else return ERROR;
+}
+
+Status GetMiddleWithNum(Tree T) {
+    int num = 1;
+    return MiddleWithNum(T, &num);
+}
+
+
 //设计算法以求解编号为i和j的两个结点的最近的公共祖先结点
 char PublicParent(Tree T,int i,int j) {
     char pathI[MAXSIZE] = {0};
@@ -680,6 +697,9 @@ void Destory(Tree *T) {
         free(*T);
         *T = NULL;
     }
+    // 字符串清空
+    treeIndex = 1;
+    str[0] = '\0';
 }
 
 int main() {
