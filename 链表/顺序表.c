@@ -25,6 +25,10 @@ Status Init(List *L) {
 //      [A]-[B]-[C]-[]-[E]-[F]
 //place == 4  count == 6
 Status Insert(List *L,ElemType E,int place) {
+    // 非法判定 不知道对不对 AI补写的
+    if(place < 1 || place > L->count + 1) {
+        return ERROR;
+    }
     L->count++;
     if(L->count > MAXSIZE)
         return ERROR;
@@ -37,6 +41,28 @@ Status Insert(List *L,ElemType E,int place) {
     L->data[ptr - 1] = E;
     return OK;
 }
+
+Status InsertForIndex(List *L, ElemType E, int index) {
+    if (index < 0 || index > L->count)
+        return ERROR;
+
+    if (L->count + 1 > MAXSIZE)
+        return ERROR;
+
+    L->count++;
+
+    int ptr = L->count - 1;
+    while (ptr > index) {
+        L->data[ptr] = L->data[ptr - 1];
+        ptr--;
+    }
+
+    L->data[index] = E;
+    return OK;
+}
+
+
+
 
 Status Add(List *L,ElemType E) {
     if(L->count == MAXSIZE) {
@@ -511,6 +537,7 @@ void DeWeightUpdate2(List *L) {
                 right -= same; // 调整 right
                 same = 0;
             }
+            // 指针复位
             left = right;
         }
         right++;
@@ -522,13 +549,10 @@ void DeWeightUpdate2(List *L) {
     printf("Runned %d times\n",count);
 }
 
-
 void DeWeight(List *L) {
     SelectSort(L);
     DeWeightUpdate(L);
 }
-
-void DeWeightRe() {}
 
 //设计算法分解链表为奇数表、偶数表
 void Resolve(List L,List *JiL,List *OuL) {

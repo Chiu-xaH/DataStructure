@@ -12,72 +12,68 @@ void Swap(int A[], int i, int j) {
     A[j] = temp;
 }
 
-void q(int A[], int n) {
+void q3(int A[], int n) {
     //处理分成三部分
     int left = 0, right = n - 1;
-    while (left != right) {
-        if (A[left] % 3 == 0)
+    int cur = left;
+    // 第一次，把%3==0的移到最左边
+    while (cur <= right) {
+        if (A[cur] % 3 == 0) {
+            Swap(A, cur, left);
             left++;
-        else
-            Swap(A, left, right);
-        if (A[left] % 3 != 0)
-            right--;
-        else
-            Swap(A, left, right);
+            cur++;
+        } else {
+            cur++;
+        }
     }
-    right = n - 1;
-    while (left != right) {
-        if (A[left] % 3 == 1)
+    // 现在 left 是 %3!=0 的起点
+    cur = left;
+    // 第二次，把%3==1的移到中间
+    while (cur <= right) {
+        if (A[cur] % 3 == 1) {
+            Swap(A, cur, left);
             left++;
-        else
-            Swap(A, left, right);
-        if (A[left] % 3 == 2)
-            right--;
-        else
-            Swap(A, left, right);
+            cur++;
+        } else {
+            cur++;
+        }
     }
 }
+
+void q2(int A[],int n) {
+    //处理分成两部分
+    int left = 0,right = n - 1;
+    while (left < right) {
+        // 左边是奇数，符合要求，继续往右走
+        if (A[left] % 2 == 1) {
+            left++;
+        }
+        // 右边是偶数，符合要求，继续往左走
+        else if (A[right] % 2 == 0) {
+            right--;
+        }
+        // 左边是偶数，右边是奇数，需要交换
+        else {
+            Swap(A, left, right);
+            left++;
+            right--;
+        }
+    }
+}
+
 int main()
 {
     int A[SIZE];
     for (int i = 0; i < SIZE; i++) {
-        A[i] = rand() % 100;
+        A[i] = rand() % 20;
     }
     printf("Original Array \n");
     for (int i = 0; i < SIZE; i++) {
         printf("%d ", A[i]);
     }
 
-    //处理分成两部分
-    int left = 0,right = SIZE - 1;
-    while(left < right) {
+    q2(A,SIZE);
 
-        if(A[left] % 2 == 1) {
-            left++;
-        }
-        if(A[right] % 2 == 0) {
-            right--;
-        } else {
-            int temp;
-            temp = A[left];
-            A[left] = A[right];
-            A[right] = temp;
-        }
-        /*if(A[left] % 2 == 0 && left < right) {
-            int temp;
-            temp = A[left];
-            A[left] = A[right];
-            A[right] = temp;
-        } else if(A[right] % 2 == 1 && left < right) {
-            int temp;
-            temp = A[left];
-            A[left] = A[right];
-            A[right] = temp;
-        }*/
-    }
-
-    //处理分成三部分
-    //q(A, SIZE);
     printf("\nOperated Array \n");
     for (int i = 0; i < SIZE; i++) {
         printf("%d ", A[i]);

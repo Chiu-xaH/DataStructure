@@ -174,12 +174,12 @@ Status Copy(LinkList *L1,LinkList *L2) {
     }
     return OK;
 }
-//将L1拼接到L2
+//将L1拼接到L2 可以再写一个改进版，直接去掉L1头结点，L2末尾与L1相接，空间复杂度O(1)
 Status Link(LinkList *L1,LinkList *L2) {
     LinkList list1 = (*L1)->next,list2 = (*L2);
 
     while(list2->next) {
-            list2 = list2->next;
+        list2 = list2->next;
     }
     
     while(list1) {
@@ -418,7 +418,7 @@ void DeWeight(LinkList *L) {
 }
 
 //补充题：删除递增有序单链表中的重复元素，要求时间性能最好
-//思路：用两个指针从头扫描，遇到相同的第一个指针固定，第二个继续直到不相同，然后删除中间重复的若干节点即可，补充这道题时我已经考完了，具体实现欢迎补充
+//思路：用两个指针从头扫描，遇到相同的第一个指针固定，第二个继续直到不相同，然后删除中间重复的若干节点即可
 void DeWeightUpdate(LinkList *L) {
     if (*L == NULL || (*L)->next == NULL)
         return;

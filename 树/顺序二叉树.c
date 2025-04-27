@@ -48,6 +48,7 @@ Status Create(Tree T) {
 	}
 	return OK;
 }
+
 void Head(Tree T,int e) {
     printf("%d",T[e]);
     if(T[2*e+1] != Nil) {

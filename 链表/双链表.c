@@ -10,8 +10,7 @@ typedef char Elemtype;
 typedef struct Node {
     Elemtype data;
     struct Node *next,*piror;
-} Node;
-typedef struct Node *LinkList;
+} Node,*LinkList;
 
 Status Init(LinkList *L) {
     *L = (LinkList)malloc(sizeof(Node));

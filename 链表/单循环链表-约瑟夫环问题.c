@@ -83,7 +83,7 @@ void Count(LinkList *L,int count) {
     }
 }
 
-void YueSeMu() {
+void YueSeFu() {
     Status I;
     LinkList L;
     I = Init(&L);
@@ -95,7 +95,7 @@ void YueSeMu() {
 }
 
 int main() {
-    YueSeMu();
+    YueSeFu();
     //跟单链表区别就是循环时结束条件（碰尾条件）改成不等于头节点
   //  Status i;
    // LinkList L;
