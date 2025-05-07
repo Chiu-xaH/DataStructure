@@ -46,6 +46,10 @@ Status GetStack(Stack S) {
     return OK;
 }
 
+Status Length(Stack S) {
+    return S.top + 1;
+}
+
 Status AllPop(Stack *S) {
     if(S->top == -1) {
         return ERROR;

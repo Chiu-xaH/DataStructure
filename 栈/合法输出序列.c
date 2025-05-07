@@ -27,10 +27,11 @@ Status Push(Stack *S,Elemtype E) {
     return OK;
 }
 
-Status Pop(Stack *S) {
+Status Pop(Stack *S,Elemtype *E) {
     if(S->top == -1) {
         return ERROR;
     }
+    *E = S->data[S->top];
     S->top--;
     return OK;
 }
@@ -43,8 +44,12 @@ Status Get(Stack *S) {
     for(int i = S->top;i > -1;i--) {
         printf("%d ",S->data[i]);
     }
-    printf("]");
+    printf("]\n");
     return OK;
+}
+
+Status Length(Stack S) {
+    return S.top + 1;
 }
 
 /*
@@ -60,32 +65,57 @@ Status Get(Stack *S) {
     序列a1, a2, a3,   …, an是否是该栈的合法的输出序列（假设输出序列在数组A中）;
 （4）给出栈的合法的输出序列的规律。
 */
-/*
-  
-[ 
-13452
-32514
 
 
-21345
-12345
-54321
-32145
-
-31245
-
-*/
-
-
-//(2)求所有合法序列
-void Allof() {
-    // 自己扩展 考试不考，但是要记住能生成多少个合法序列，在笔记文件夹里有！
+// 求所有合法序列
+// 自己扩展 考试不考，但是要记住能生成多少个合法序列，在笔记文件夹里有！
+int count = 0;
+void BackTrack(int maxNum,int nextNum, Stack* stack, Stack* out) 
+{
+    // 已经完成出栈 
+	if (Length(*stack) == 0 && nextNum > maxNum) {
+		Get(out);
+        count++;
+		return;
+	}
+    // 可以出栈,遍历这一步进行出栈的情况
+	if(Length(*stack) > 0) {
+        Elemtype E1,E2;
+        // 出栈
+        Pop(stack,&E1);
+		Push(out,E1);
+        // 遍历
+		BackTrack(maxNum, nextNum, stack, out);
+        // 恢复现场
+        Pop(out,&E2);
+		Push(stack,E2);
+	}
+    // 可以入栈，遍历这一步进行入栈的情况
+	if (nextNum <= maxNum) {
+        // 入栈
+		Push(stack, nextNum);
+        // 遍历
+		BackTrack(maxNum, nextNum + 1, stack, out);
+        // 恢复现场
+        Elemtype E;
+		Pop(stack,&E);
+	}
 }
-//判断是否为合法输出
 
-//(1)(3)判断是否为合法输出
-//34521
-//54321
+void AllStackOutput(int n) {
+    // 初始化
+    Stack stack;
+	Stack out;
+    Init(&stack);
+    Init(&out);
+    count = 0;
+    // 开始
+	BackTrack(n, 1, &stack, &out);
+    printf("Total: %d\n",count);
+}
+
+
+// 判断是否为合法输出
 Status isStack(int arr[],int length) {
     for(int i = 0;i < length-1;i++) {
         int elem = arr[i];
@@ -113,28 +143,25 @@ Status isStack(int arr[],int length) {
 
 int main() {
    Status i;
-   // Stack S;
-    //i = Init(&S);
-   /// Operation(&S,0);
    
    int size = 5;
-   printf("Input how many you want to? ");
-   scanf("%d",&size);
+//    printf("Input how many you want to? ");
+//    scanf("%d",&size);
 
-   int arr[size];
+//    int arr[size];
 
-   printf("Input the number\n");
-   for(int i = 0;i < size;i++) {
-     scanf("%d",&arr[i]);
-   }
-    i = isStack(arr,size);
+//    printf("Input the number\n");
+//    for(int i = 0;i < size;i++) {
+//      scanf("%d",&arr[i]);
+//    }
+//     i = isStack(arr,size);
 
-    if(i) {
-        printf("Is a right stack");
-    } else {
-        printf("Is a false stack");
-    }
-    
-    //i = Get(&S);
+//     if(i) {
+//         printf("Is a right stack");
+//     } else {
+//         printf("Is a false stack");
+//     }
+
+AllStackOutput(5);    
     return 0;
 }

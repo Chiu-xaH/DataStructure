@@ -6,7 +6,7 @@
 #define MAXSIZE 20
 
 typedef int Status;
-typedef char ElemType;
+typedef int ElemType;
 
 typedef struct QueueNode {
     ElemType data;
@@ -48,7 +48,7 @@ Status DeAdd(LinkQueue *Q,ElemType *E) {
 Status Get(LinkQueue *Q) {
     LinkListPtr list = Q->front->next;
     while (list) {
-        printf("%c ",list->data);
+        printf("%d ",list->data);
         list = list->next;
     }
     printf("\n");
@@ -89,6 +89,35 @@ Status Reverse(LinkQueue *Q) {
 
     return OK;
 }
+// 约瑟夫环
+void YueSeFu(int n, int k, int m) {
+    LinkQueue Q;
+    Init(&Q);
+
+    for (int i = 1; i <= n; i++) {
+        Add(&Q, i); // 用 A~Z 表示人
+    }
+
+    int count = 0; // 报数计数
+    int currentPeople = n;
+    ElemType temp;
+
+    while (currentPeople > m) {
+        DeAdd(&Q, &temp); // 出队
+        count++;
+
+        if (count == k) {
+            // 第 k 人出局
+            count = 0;
+            currentPeople--;
+        } else {
+            // 没出局的重新排到队尾
+            Add(&Q, temp);
+        }
+    }
+    Get(&Q);
+}
+
 
 int main() {
     LinkQueue Q1,Q2;
