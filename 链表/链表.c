@@ -496,6 +496,12 @@ void Merge(LinkList *L1, LinkList *L2) {
     free(*L2);
     *L2 = NULL;
 }
+// 期中考试最后一道题 没做出来
+// 限制条件：使用链表、原地，即不允许申请任何空间
+// 对无序链表进行排序，从小到大递增
+void Question(LinkList *L) {
+
+}
 
 
 int main() {
