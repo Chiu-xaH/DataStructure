@@ -109,15 +109,15 @@ Status DFSisLoop(MGraph G, int i, int parent) {
             if (visited[j] == FALSE) {
                 //子节点中发现环
                 if (DFSisLoop(G, j, i) == FALSE) {
-                    return FALSE;
+                    return TRUE;
                 }
                 //已访问过(else)且不是父节点(j != parent(上一次的i))
             } else if (j != parent) {
-                return FALSE;
+                return TRUE;
             }
         }
     }
-    return TRUE;
+    return FALSE;
 }
 
 Status isTreeDFS(MGraph G) {
@@ -126,7 +126,7 @@ Status isTreeDFS(MGraph G) {
     }
 
     //检查有没有环
-    if (DFSisLoop(G, 0, -1) == FALSE) {
+    if (DFSisLoop(G, 0, -1) == TRUE) {
         printf("IS LOOP\n");
         return FALSE;
     }
