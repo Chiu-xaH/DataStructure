@@ -124,15 +124,20 @@ Status LeafCount(Tree T) {
 }
 //设计算法输出从根结点到每个叶子结点的路径（利用栈）
 Status GetLeafRoad(Tree T,Stack *S) {
-    if(T != NULL) {
-        if(T->leftChild == NULL && T->rightChild == NULL) {
-            GetStack(S);
-        }
-        Push(S,T->data);
-        GetLeafRoad(T->leftChild,S);
-        GetLeafRoad(T->rightChild,S);
-        return OK;
-    } else return ERROR;
+    if (T == NULL) return ERROR;
+
+    Push(S, T->data);  // 先压栈
+
+    if (T->leftChild == NULL && T->rightChild == NULL) {
+        GetStack(S);   // 到叶子节点时输出路径
+    } else {
+        GetLeafRoad(T->leftChild, S);
+        GetLeafRoad(T->rightChild, S);
+    }
+
+    ElemTypes E;
+    Pop(S,&E);  // 回溯时弹栈，撤销当前路径
+    return OK;
 }
 //求高度
 /*
@@ -193,6 +198,24 @@ void Transfer(Tree T,int i,char *S) {
         S[i] = T->data;
         Transfer(T->leftChild,2*i + 1,S);
         Transfer(T->rightChild,2*i + 2,S);
+    }
+}
+void PrintTransfer(Tree T) {
+    // 计算顺序存储需要的容量 根据二叉树性质和高度
+    int count = 0;
+    for(int i = 0;i < Height(T);i++) {
+        count += pow(2,i);
+    }
+    // 初始化顺序存储数组
+    char A[count+1];
+    for(int i = 0;i <= count;i++) {
+        A[i] = '#';
+    }
+    // 转换
+    Transfer(T,0,A);
+    // 打印
+    for(int i = 0;i <= count;i++) {
+        printf("%c",A[i]);
     }
 }
 //设计算法顺序二叉树转化为链表二叉树
@@ -445,7 +468,7 @@ Status GetMiddleWithNum(Tree T) {
 
 
 //设计算法以求解编号为i和j的两个结点的最近的公共祖先结点
-char PublicParent(Tree T,int i,int j) {
+ElemTypes PublicParent(Tree T,int i,int j) {
     char pathI[MAXSIZE] = {0};
     char pathJ[MAXSIZE] = {0};
     Tree nodeI = NULL,nodeJ = NULL;

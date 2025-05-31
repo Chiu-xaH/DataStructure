@@ -319,7 +319,7 @@ Status AllPC(Tree T) {
 }
 
 //设计算法按先序输出森林每个结点，并给出层次数
-void GetHeadUpdate(Tree T,int level) {
+Status GetHeadUpdate(Tree T,int level) {
     if(T != NULL) {
         printf("(%c,%d) ",T->data,level);
         GetHeadUpdate(T->firstSon,level+1);
@@ -334,21 +334,72 @@ void GetHeadUpdateForest(Forest F) {
     }
 }
 //设计算法，森林转为广义表并输出（可选做）
+void PrintTreeWithGList(Tree T) {
+    if (!T) return;
 
-void Question(Tree T,Tree parent,Tree preBrother) {
-    if(parent != NULL && T == parent->firstSon) {
-        printf("(%c,%c)\n",parent->data,T->data);
-    } else if(preBrother != NULL) {
-        printf("(%c,%c)\n",preBrother->data,T->data);
-    }
-    
-    if(T->firstSon) {
-        Question(T->firstSon,T,NULL);
-    }
-    if(T->nextBrother) {
-        Question(T->nextBrother,parent,T);
+    printf("%c", T->data); // 打印根结点数据
+
+    if (T->firstSon) {
+        printf("(");
+        Tree child = T->firstSon;
+        while (child) {
+            PrintTreeWithGList(child);  // 递归打印子树
+            if (child->nextBrother) {
+                printf(",");
+            }
+            child = child->nextBrother;
+        }
+        printf(")");
     }
 }
+
+void PrintForestWithGList(Forest F) {
+     for (int i = 0; i < F.treeCount; i++) {
+        PrintTreeWithGList(F.root[i]);
+        if (i != F.treeCount - 1) {
+            printf(",");
+        }
+    }
+}
+
+
+int CountChildren(Tree T) {
+    int count = 0;
+    Tree p = T->firstSon;
+    while (p != NULL) {
+        count++;
+        p = p->nextBrother;
+    }
+    return count;
+}
+
+// 求树的度（最多有几个叉,单个结点拥有的最多孩子数）
+int TreeDegree(Tree T) {
+    if (T == NULL) return 0;
+    
+    int maxDegree = CountChildren(T);
+    
+    for (Tree child = T->firstSon; child != NULL; child = child->nextBrother) {
+        int childDegree = TreeDegree(child);
+        if (childDegree > maxDegree) {
+            maxDegree = childDegree;
+        }
+    }
+
+    return maxDegree;
+}
+
+int ForestDegree(Forest F) {
+    int maxDegree = 0;
+    for (int i = 0; i < F.treeCount; i++) {
+        int treeDeg = TreeDegree(F.root[i]);
+        if (treeDeg > maxDegree) {
+            maxDegree = treeDeg;
+        }
+    }
+    return maxDegree;
+}
+
 
 int main() {
     Status i;
