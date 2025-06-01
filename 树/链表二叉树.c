@@ -291,6 +291,9 @@ Status isEmpty(Queue Q) {
 }
 //层序遍历
 void GetLayer(Tree T) {
+    if (T == NULL) {
+        return;
+    }
     Queue Q;
     InitQueue(&Q);
     Tree tree = T;
@@ -466,41 +469,135 @@ Status GetMiddleWithNum(Tree T) {
     return MiddleWithNum(T, &num);
 }
 
+Tree SearchPublicParent(Tree T, Tree I, Tree J) {
+    if (T == NULL || T == I || T == J) {
+        return T;
+    }
+
+    Tree left = SearchPublicParent(T->leftChild, I, J);
+    Tree right = SearchPublicParent(T->rightChild, I, J);
+    // 目标在左子树和右子树，第一次发现此点即为最近公共祖先
+    if (left && right) {
+        return T;
+    }
+    // 否则返回非空的子树，两个目标都在那边
+    return left ? left : right;
+}
 
 //设计算法以求解编号为i和j的两个结点的最近的公共祖先结点
-ElemTypes PublicParent(Tree T,int i,int j) {
-    char pathI[MAXSIZE] = {0};
-    char pathJ[MAXSIZE] = {0};
-    Tree nodeI = NULL,nodeJ = NULL;
-    Find(T,i,&nodeI);
-    Find(T,j,&nodeJ);
-    
-    GetLoad(T,nodeI,0,pathI);
-    int lengthI = pathSize;
-    for(int ii = 0;ii < lengthI;ii++) {
-        pathI[ii] = path2[ii];
+void PublicParent(Tree T,int i,int j) {
+    Tree node1, node2;
+    if (Find(T, i, &node1) == ERROR || Find(T, j, &node2) == ERROR) {
+        return;
     }
+
+    Tree ancestor = SearchPublicParent(T, node1, node2);
+    if (ancestor) {
+        printf("Nearest is %c\n", ancestor->data);
+    } else {
+        printf("Nearest is NULL");
+    }
+//     char pathI[MAXSIZE] = {0};
+//     char pathJ[MAXSIZE] = {0};
+//     Tree nodeI = NULL,nodeJ = NULL;
+//     Find(T,i,&nodeI);
+//     Find(T,j,&nodeJ);
     
-    GetLoad(T,nodeJ,0,pathJ);
-    int lengthJ = pathSize;
-    for(int ii = 0;ii < lengthJ;ii++) {
-        pathJ[ii] = path2[ii];
-    } 
-////初始化////////////////////////////
-    int ptrI = 0,ptrJ = 0;
-    int min = 0;
+//     GetLoad(T,nodeI,0,pathI);
+//     int lengthI = pathSize;
+//     for(int ii = 0;ii < lengthI;ii++) {
+//         pathI[ii] = path2[ii];
+//     }
+    
+//     GetLoad(T,nodeJ,0,pathJ);
+//     int lengthJ = pathSize;
+//     for(int ii = 0;ii < lengthJ;ii++) {
+//         pathJ[ii] = path2[ii];
+//     } 
+// ////初始化////////////////////////////
+//     int ptrI = 0,ptrJ = 0;
+//     int min = 0;
    
-    while(ptrI < lengthI && ptrJ < lengthJ) {
-        if(pathI[ptrI] == pathJ[ptrJ]) {
-            min = ptrI;
-            ptrI++;
-            ptrJ++;
-        } else {
-            break;
+//     while(ptrI < lengthI && ptrJ < lengthJ) {
+//         if(pathI[ptrI] == pathJ[ptrJ]) {
+//             min = ptrI;
+//             ptrI++;
+//             ptrJ++;
+//         } else {
+//             break;
+//         }
+//     }
+//     return pathI[min];
+}
+// 键盘输入一个元素x，求其父节点、兄弟结点、子结点的值，不存在时给出相应提示信息。对兄弟结点和孩子结点，存在时要明确指出是左兄弟、左孩子、右兄弟或右孩子。
+void PrintNodeRelation(Tree T,ElemTypes X) {
+    if (T == NULL) {
+        return;
+    }
+    Tree target = NULL;
+    Tree parent = NULL;
+    Tree leftBrother = NULL, rightBrother = NULL;
+    Tree leftChild = NULL, rightChild = NULL;
+
+    Queue Q;
+    InitQueue(&Q);
+    Tree tree = T;
+    Add(&Q,tree);
+    while(!isEmpty(Q)) {
+        Tree E;
+        DeAdd(&Q,&E);
+        // 找到目标节点
+        if (E->data == X) {
+            target = E;
+            if (E->leftChild != NULL)
+                leftChild = E->leftChild;
+            if (E->rightChild != NULL) 
+                rightChild = E->rightChild;
+        }
+        if(E->leftChild) {
+            Add(&Q,E->leftChild);
+            if (E->leftChild->data == X) {
+                parent = E;
+                if (E->rightChild) rightBrother = E->rightChild;
+            }
+        }
+        if(E->rightChild) {
+            Add(&Q,E->rightChild);
+            if (E->rightChild->data == X) {
+                parent = E;
+                if (E->leftChild) leftBrother = E->leftChild;
+            }
         }
     }
-    return pathI[min];
+    if (!target) {
+        printf("Not Found Node Which Value Is %c\n", X);
+        return;
+    }
+    if (parent) {
+        printf("Parent Value Is %c\n", parent->data);
+    } else {
+        printf("No Parent\n");
+    }
+    if (leftBrother) {
+        printf("Left Brother Value Is %c\n", leftBrother->data);
+    }
+    if (rightBrother) {
+        printf("Right Brother Value Is %c\n", rightBrother->data);
+    }
+    if (!leftBrother && !rightBrother) {
+        printf("No Brothers\n");
+    }
+    if (leftChild) {
+        printf("Left Child Value Is %c\n", leftChild->data);
+    }
+    if (rightChild) {
+        printf("Right Child Value Is %c\n", rightChild->data);
+    }
+    if (!leftChild && !rightChild) {
+        printf("No Children\n");
+    }
 }
+
 
 int count = 1;
 Status GetMiddleUpdate(Tree T) {
