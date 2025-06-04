@@ -23,8 +23,9 @@ int Length(Hash H) {
 }
 
 int HashFun(int key) {
-    return key % 7;
+    return key % 4;
 }
+
 
 void Insert(Hash *H,int key) {
     //拉链法解决冲突，寻找空位
@@ -90,8 +91,8 @@ int SearchLength(Hash H,int key) {
     return -1;
 }
 
-int AverageSearchLength(Hash H) {
-    int total = 0;
+double AverageSearchLength(Hash H) {
+    double total = 0;
     int num = 0;
     for(int i = 0;i < Length(H);i++) {
         LinkList list = &H.elem[i];

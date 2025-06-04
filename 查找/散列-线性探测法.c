@@ -74,9 +74,9 @@ int SearchLength(Hash H,int key) {
     return count;
 }
 //平均查找长度
-int AverageSearchLength(Hash H) {
+double AverageSearchLength(Hash H) {
     int length = H.count;
-    int total = 0;
+    double total = 0;
     int num = 0;
     for(int i = 0;i < length;i++) {
         if(H.elem[i] != NULLKEY) {
