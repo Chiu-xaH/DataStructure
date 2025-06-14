@@ -69,6 +69,7 @@ Status Create(GraphAd *G) {
         // 添加边 jj -> ii
        /* E = (EdgeNode *)malloc(sizeof(EdgeNode));
         if (E == NULL) return ERROR;
+        E->weight = weight;
         E->adjvex = ii;
         E->next = G->adjList[jj].firstEdge;
         G->adjList[jj].firstEdge = E;*/
@@ -114,8 +115,8 @@ Status isConnected(GraphAd G) {
     }
     return TRUE;
 }
-//无向图边的数量
-int EdgeCounts(GraphAd G) {
+// 图边的数量
+int EdgeCounts(GraphAd G,Status isWuxiang) {
     int count = 0;
     for(int i = 0;i < G.numNodes;i++) {
         EdgeNode  *ptr = G.adjList[i].firstEdge;
@@ -124,7 +125,38 @@ int EdgeCounts(GraphAd G) {
             ptr = ptr->next;
         }
     }
-    return count / 2; 
+    if(isWuxiang == TRUE) {
+        return count / 2;
+    } else {
+        return count;
+    }
+}
+
+//设计算法实现函数firstadj(G, v)（返回第一个与v连接的点）
+PointType firstAdj(GraphAd G,PointType v) {
+    v -= 1; // 规整索引
+    if (v < 0 || v >= G.numNodes) return -1;
+
+    EdgeNode *E = G.adjList[v].firstEdge;
+    if (E)
+        return E->adjvex + 1;// 转换回 1-based index
+    else
+        return -1; // 没有邻接点
+}
+//设计算法实现函数nextadj(G, v, w)（返回与v相邻并在w之后的下一个顶点）。
+PointType nextAdj(GraphAd G,PointType v,PointType w) {
+    v -= 1; // 规整索引
+    w -= 1; // 规整索引
+    if (v < 0 || v >= G.numNodes) return -1;
+
+    EdgeNode *E = G.adjList[v].firstEdge;
+    while (E && E->adjvex != w) {
+        E = E->next;
+    }
+    if (E && E->next)
+        return E->next->adjvex + 1;// 转换回 1-based index
+    else
+        return -1; // 没有后继邻接点
 }
 //拓扑排序
 /*
@@ -301,6 +333,140 @@ void Destory(GraphAd *G) {
         }
         G->numNodes--;
     }
+}
+
+//引入队列
+typedef struct {
+    int data[MAX];
+    int front;
+    int rear;
+} Queue;
+
+Status Init(Queue *Q) {
+    Q->front = 0;
+    Q->rear = 0;
+    return OK;
+}
+
+Status Add(Queue *Q,PointType E) {
+    if ((Q->rear + 1) % MAX == Q->front) {
+        return ERROR;
+    }	
+	Q->data[Q->rear] = E;	
+    Q->rear++;		
+	Q->rear = Q->rear % MAX;
+    return OK;
+}
+
+Status DeAdd(Queue *Q,PointType *E) {
+    if(Q->front == Q->rear) {
+        return ERROR;
+    }
+    *E = Q->data[Q->front];
+    Q->front++;
+    Q->front = Q->front % MAX;
+    return OK;
+}
+
+int Length(Queue *Q) {
+    if(Q->front == Q->rear) {
+        return 0;
+    }
+    int count = 0;
+    int i = Q->front;
+    while(i != Q->rear) {
+        count++;
+        i++;
+        i = i % MAX;
+    }
+    return count;
+}
+
+Status Get(Queue *Q) {
+    if(Q->front == Q->rear) {
+        return ERROR;
+    }
+    int i = Q->front;
+    while(i != Q->rear) {
+        printf("%d ",Q->data[i]);
+        i++;
+        i = i % MAX;
+    }
+    printf("\n");
+    return OK;
+}
+
+Status BFSisLoop(GraphAd G, int start) {
+    Queue Q;
+    Init(&Q);
+
+    int parent[MAX]; // 用于记录每个节点的父节点
+    for (int i = 0; i < G.numNodes; i++) parent[i] = -1;
+
+    visited[start] = TRUE;
+    Add(&Q, start);
+
+    while (Length(&Q)) {
+        int u;
+        DeAdd(&Q, &u);
+        for (EdgeNode *p = G.adjList[u].firstEdge; p; p = p->next) {
+            int v = p->adjvex;
+            if (!visited[v]) {
+                visited[v] = TRUE;
+                parent[v] = u;
+                Add(&Q, v);
+            } else if (v != parent[u]) {
+                return FALSE; // 非父节点已访问，说明有环
+            }
+        }
+    }
+    return TRUE;
+}
+
+// 设计算法以判断G是否是一棵以v0为根的有向树，
+Status isRootTreeBFS(GraphAd G,PointType root) {
+    for (int i = 0; i < G.numNodes; i++) visited[i] = FALSE;
+
+    if (!BFSisLoop(G,root-1)) { // 规整索引
+        printf("Has Loop!\n");
+        return FALSE;
+    }
+
+    // 检查连通性
+    for (int i = 0; i < G.numNodes; i++) {
+        if (!visited[i]) return FALSE;
+    }
+
+    return TRUE;
+}
+void DFS5(GraphAd G, int arc[][MAX], int u) {
+    visited[u] = TRUE;
+
+    EdgeNode *E = G.adjList[u].firstEdge;
+    while (E) {
+        int v = E->adjvex;
+        if (!visited[v]) {
+            arc[u][v] = E->weight;
+            // 无向图，矩阵对称,如果不是无向图需要注释掉
+            arc[v][u] = E->weight; 
+
+            DFS5(G, arc, v);
+        }
+        E = E->next;
+    }
+}
+
+// 	设连通图G用邻接表A表示，设计算法以产生dfs（1）的dfs生成树，并存储到邻接矩阵B[][]中。
+void Question5(GraphAd G,int arc[][MAX]) {
+    // 初始化邻接矩阵
+    for (int i = 0; i < G.numNodes; i++) {
+        visited[i] = FALSE;
+        for (int j = 0; j < G.numNodes; j++) {
+            arc[i][j] = 0; 
+        }
+    }
+    int rootIndex = 1-1;
+    DFS5(G, arc, rootIndex);
 }
 
 int main() {

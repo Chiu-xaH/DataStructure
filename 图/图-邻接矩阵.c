@@ -193,7 +193,6 @@ Status CreateHuzhi(MGraph *G) {
     printf("Create Successfully!\n");
     return OK;
 }
-//设计算法以判断给定的有向图是以v0为根的有向树。
 
 //设计算法以判断图中的一个顶点是否为关节点。
 //关节点：若一个顶点被删除后，其原先所在的连通分量变成两个及以上的连通分量
